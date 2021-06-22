@@ -1,7 +1,6 @@
 package com.belajar.andro.quotesapp.model.quotes;
 
 import java.util.ArrayList;
-import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
 public class QuotesDiscoverResponse{

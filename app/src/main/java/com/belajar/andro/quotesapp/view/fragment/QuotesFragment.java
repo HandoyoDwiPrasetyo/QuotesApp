@@ -11,8 +11,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import com.belajar.andro.quotesapp.R;
 import com.belajar.andro.quotesapp.adapter.QuoteDiscoverAdapter;
@@ -27,11 +31,12 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 
-public class QuotesFragment extends Fragment {
+public class QuotesFragment extends Fragment implements SearchView.OnQueryTextListener{
 
     private QuoteDiscoverAdapter quoteDiscoverAdapter;
     private RecyclerView rvQuotesDiscover;
     private QuotesViewModel quotesViewModel;
+    private ArrayList<QuotesDiscoverResultsItem> savedItem = new ArrayList<>();
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -47,15 +52,6 @@ public class QuotesFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment QuotesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static QuotesFragment newInstance(String param1, String param2) {
         QuotesFragment fragment = new QuotesFragment();
         Bundle args = new Bundle();
@@ -77,7 +73,8 @@ public class QuotesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // show the search nav
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_quotes, container, false);
     }
 
@@ -92,7 +89,7 @@ public class QuotesFragment extends Fragment {
 
         quotesViewModel = new ViewModelProvider(this).get(QuotesViewModel.class);
         quotesViewModel.setQuoteDiscover();
-        quotesViewModel.getQuotesDiscover().observe(this, getQuoteDiscover);
+        quotesViewModel.getQuotesDiscover().observe(getActivity(), getQuoteDiscover);
 
         rvQuotesDiscover.setAdapter(quoteDiscoverAdapter);
     }
@@ -102,7 +99,37 @@ public class QuotesFragment extends Fragment {
         public void onChanged(ArrayList<QuotesDiscoverResultsItem> quotesDiscoverResultsItems) {
             if (quotesDiscoverResultsItems != null){
                 quoteDiscoverAdapter.setData(quotesDiscoverResultsItems);
+                savedItem = quotesDiscoverResultsItems;
             }
         }
     };
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.search_nav, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setQueryHint(getResources().getString(R.string.query_hint));
+        searchView.onActionViewExpanded();
+        searchView.setOnQueryTextListener(this);
+
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        quoteDiscoverAdapter.setData(savedItem);
+        quoteDiscoverAdapter.filter(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return true;
+    }
+
+
+
 }

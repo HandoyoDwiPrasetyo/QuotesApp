@@ -11,6 +11,7 @@ import android.widget.SearchView;
 
 import com.belajar.andro.quotesapp.adapter.QuoteDiscoverAdapter;
 import com.belajar.andro.quotesapp.view.fragment.AuthorsFragment;
+import com.belajar.andro.quotesapp.view.fragment.HistoryFragment;
 import com.belajar.andro.quotesapp.view.fragment.QuotesFragment;
 import com.belajar.andro.quotesapp.R;
 import com.belajar.andro.quotesapp.view.fragment.TagsFragment;
@@ -49,6 +50,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
             case R.id.menu_bottom_nav_author:
                 selectedFragment = new AuthorsFragment();
+                loadFragment(selectedFragment);
+                break;
+
+            case R.id.menu_bottom_nav_history:
+                selectedFragment = new HistoryFragment();
                 loadFragment(selectedFragment);
                 break;
 

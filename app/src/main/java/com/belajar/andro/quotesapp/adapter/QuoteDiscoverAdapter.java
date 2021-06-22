@@ -14,21 +14,28 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.belajar.andro.quotesapp.R;
+import com.belajar.andro.quotesapp.database.AppDatabase;
+import com.belajar.andro.quotesapp.database.SearchHistoryModel;
 import com.belajar.andro.quotesapp.model.quotes.QuotesDiscoverResultsItem;
 import com.belajar.andro.quotesapp.view.activity.DetailQuote;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
-public class QuoteDiscoverAdapter extends RecyclerView.Adapter<QuoteDiscoverAdapter.ViewHolder>{
+public class QuoteDiscoverAdapter extends RecyclerView.Adapter<QuoteDiscoverAdapter.ViewHolder> {
 
     private ArrayList<QuotesDiscoverResultsItem> quotesDiscoverResultsItems = new ArrayList<>();
     private Context context;
+    private ArrayList<QuotesDiscoverResultsItem> quotesFiltered = new ArrayList<>();
+
+    private AppDatabase appDatabase;
 
     public QuoteDiscoverAdapter(Context context) {
         this.context = context;
+        appDatabase = AppDatabase.iniDatabase(this.context);
     }
 
-    public void setData(ArrayList<QuotesDiscoverResultsItem> items){
+    public void setData(ArrayList<QuotesDiscoverResultsItem> items) {
         quotesDiscoverResultsItems.clear();
         quotesDiscoverResultsItems.addAll(items);
         notifyDataSetChanged();
@@ -50,10 +57,16 @@ public class QuoteDiscoverAdapter extends RecyclerView.Adapter<QuoteDiscoverAdap
             @Override
             public void onClick(View v) {
                 try {
+                    SearchHistoryModel historyModel = new SearchHistoryModel();
+                    historyModel.setContent(quotesDiscoverResultsItems.get(position).getContent());
+                    historyModel.setAuthor(quotesDiscoverResultsItems.get(position).getAuthor());
+
+                    appDatabase.historyDao().insertHistory(historyModel);
+
                     Log.d("QuoteAdapter", "Berhasil, msg:");
-                    Toast.makeText(context, "Berhasil",Toast.LENGTH_SHORT).show();
-                } catch (Exception rt){
-                    Log.e("QuoteAdapter", "Gagal, msg:"+rt.getMessage());
+                    Toast.makeText(context, "Berhasil", Toast.LENGTH_SHORT).show();
+                } catch (Exception rt) {
+                    Log.e("QuoteAdapter", "Gagal, msg:" + rt.getMessage());
                     Toast.makeText(context, "Gagal", Toast.LENGTH_SHORT).show();
                 }
 
@@ -85,5 +98,20 @@ public class QuoteDiscoverAdapter extends RecyclerView.Adapter<QuoteDiscoverAdap
             tvQuote = itemView.findViewById(R.id.item_list_iv_quote);
             tvAuthor = itemView.findViewById(R.id.item_list_iv_author);
         }
+    }
+
+    // filter name in Search Bar
+    public void filter(String characterText) {
+        characterText = characterText.toLowerCase(Locale.getDefault());
+
+        quotesFiltered.clear();
+        for (QuotesDiscoverResultsItem quote : quotesDiscoverResultsItems) {
+            if (quote.getContent().toLowerCase(Locale.getDefault()).contains(characterText)) {
+                quotesFiltered.add(quote);
+            }
+        }
+
+        setData(quotesFiltered);
+        notifyDataSetChanged();
     }
 }

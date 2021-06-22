@@ -11,8 +11,11 @@ public class SearchHistoryModel {
     @ColumnInfo(name = "id")
     private int id;
 
-    @ColumnInfo(name = "cari")
-    private String cari;
+    @ColumnInfo(name = "content")
+    private String content;
+
+    @ColumnInfo(name = "author")
+    private String author;
 
     public int getId() {
         return id;
@@ -22,11 +25,19 @@ public class SearchHistoryModel {
         this.id = id;
     }
 
-    public String getCari() {
-        return cari;
+    public String getContent() {
+        return content;
     }
 
-    public void setCari(String cari) {
-        this.cari = cari;
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

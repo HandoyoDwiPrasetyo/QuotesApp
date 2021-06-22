@@ -5,8 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,22 +13,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.belajar.andro.quotesapp.R;
-import com.belajar.andro.quotesapp.adapter.TagDiscoverAdapter;
-import com.belajar.andro.quotesapp.model.quotes.QuotesDiscoverResultsItem;
-import com.belajar.andro.quotesapp.view.viewmodel.QuotesViewModel;
+import com.belajar.andro.quotesapp.adapter.HistoryDiscoverAdapter;
+import com.belajar.andro.quotesapp.database.AppDatabase;
+import com.belajar.andro.quotesapp.database.SearchHistoryModel;
 
 import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TagsFragment#newInstance} factory method to
+ * Use the {@link HistoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TagsFragment extends Fragment {
-
-    private TagDiscoverAdapter tagDiscoverAdapter;
-    private RecyclerView rvTagsAdapter;
-    private QuotesViewModel quotesViewModel;
+public class HistoryFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,7 +35,13 @@ public class TagsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public TagsFragment() {
+    private HistoryDiscoverAdapter historyDiscoverAdapter;
+    private RecyclerView rvHistory;
+    private SearchHistoryModel historyModel;
+    private AppDatabase appDatabase;
+    private ArrayList<SearchHistoryModel> listHistory = new ArrayList<>();
+
+    public HistoryFragment() {
         // Required empty public constructor
     }
 
@@ -51,11 +51,11 @@ public class TagsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TagsFragment.
+     * @return A new instance of fragment HistoryFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TagsFragment newInstance(String param1, String param2) {
-        TagsFragment fragment = new TagsFragment();
+    public static HistoryFragment newInstance(String param1, String param2) {
+        HistoryFragment fragment = new HistoryFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -76,31 +76,26 @@ public class TagsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tags, container, false);
+        return inflater.inflate(R.layout.fragment_history, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        tagDiscoverAdapter = new TagDiscoverAdapter(getContext());
-        tagDiscoverAdapter.notifyDataSetChanged();
 
-        rvTagsAdapter = view.findViewById(R.id.fragment_tag_rv);
-        rvTagsAdapter.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        rvHistory = view.findViewById(R.id.fragment_history_rv);
 
-        quotesViewModel = new ViewModelProvider(this).get(QuotesViewModel.class);
-        quotesViewModel.setQuoteDiscover();
-        quotesViewModel.getQuotesDiscover().observe(getActivity(), getTagDiscover);
+        historyDiscoverAdapter = new HistoryDiscoverAdapter(getContext());
+        historyDiscoverAdapter.notifyDataSetChanged();
 
-        rvTagsAdapter.setAdapter(tagDiscoverAdapter);
-    }
-
-    public Observer<ArrayList<QuotesDiscoverResultsItem>> getTagDiscover = new Observer<ArrayList<QuotesDiscoverResultsItem>>() {
-        @Override
-        public void onChanged(ArrayList<QuotesDiscoverResultsItem> quotesDiscoverResultsItems) {
-            if (quotesDiscoverResultsItems != null){
-                tagDiscoverAdapter.setData(quotesDiscoverResultsItems);
-            }
+        if (appDatabase == null){
+            appDatabase = AppDatabase.iniDatabase(getContext());
         }
-    };
+
+        listHistory.addAll(appDatabase.historyDao().getHistory());
+        historyDiscoverAdapter.setData(listHistory);
+
+        rvHistory.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        rvHistory.setAdapter(historyDiscoverAdapter);
+    }
 }

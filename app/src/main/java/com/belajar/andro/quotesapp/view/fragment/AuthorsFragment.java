@@ -90,7 +90,7 @@ public class AuthorsFragment extends Fragment {
 
         quotesViewModel = new ViewModelProvider(this).get(QuotesViewModel.class);
         quotesViewModel.setQuoteDiscover();
-        quotesViewModel.getQuotesDiscover().observe(this, getQuoteDiscover);
+        quotesViewModel.getQuotesDiscover().observe(getActivity(), getQuoteDiscover);
 
         rvAuthorsDiscover.setAdapter(authorDiscoverAdapter);
     }
