@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private Fragment selectedFragment = new QuotesFragment();
     private BottomNavigationView bottomNavigationView;
-    QuoteDiscoverAdapter quoteDiscoverAdapter;
 
 
     @Override
@@ -32,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         loadFragment(selectedFragment);
-        QuoteDiscoverAdapter quoteDiscoverAdapter
     }
 
 
@@ -56,27 +54,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         }
         return loadFragment(selectedFragment);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_top_nav,menu);
-        MenuItem menuItem = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-
-                return false;
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
     }
 
     private boolean loadFragment(Fragment selectedFragment) {

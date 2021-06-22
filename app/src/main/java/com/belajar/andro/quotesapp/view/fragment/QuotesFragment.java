@@ -10,18 +10,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.belajar.andro.quotesapp.R;
 import com.belajar.andro.quotesapp.adapter.QuoteDiscoverAdapter;
-import com.belajar.andro.quotesapp.database.AppDatabase;
-import com.belajar.andro.quotesapp.database.SearchHistoryModel;
 import com.belajar.andro.quotesapp.model.quotes.QuotesDiscoverResultsItem;
 import com.belajar.andro.quotesapp.view.viewmodel.QuotesViewModel;
 
@@ -32,7 +26,6 @@ import java.util.ArrayList;
  * Use the {@link QuotesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-
 
 public class QuotesFragment extends Fragment {
 
@@ -52,7 +45,6 @@ public class QuotesFragment extends Fragment {
 
     public QuotesFragment() {
         // Required empty public constructor
-//        appDatabase = AppDatabase.iniDatabase(getContext());
     }
 
     /**
@@ -108,7 +100,7 @@ public class QuotesFragment extends Fragment {
     private Observer<ArrayList<QuotesDiscoverResultsItem>> getQuoteDiscover = new Observer<ArrayList<QuotesDiscoverResultsItem>>() {
         @Override
         public void onChanged(ArrayList<QuotesDiscoverResultsItem> quotesDiscoverResultsItems) {
-            if (quoteDiscoverAdapter != null){
+            if (quotesDiscoverResultsItems != null){
                 quoteDiscoverAdapter.setData(quotesDiscoverResultsItems);
             }
         }

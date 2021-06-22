@@ -6,10 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,24 +14,18 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.belajar.andro.quotesapp.R;
-import com.belajar.andro.quotesapp.database.AppDatabase;
-import com.belajar.andro.quotesapp.database.SearchHistoryModel;
 import com.belajar.andro.quotesapp.model.quotes.QuotesDiscoverResultsItem;
 import com.belajar.andro.quotesapp.view.activity.DetailQuote;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
-public class QuoteDiscoverAdapter extends RecyclerView.Adapter<QuoteDiscoverAdapter.ViewHolder> implements Filterable {
+public class QuoteDiscoverAdapter extends RecyclerView.Adapter<QuoteDiscoverAdapter.ViewHolder>{
 
     private ArrayList<QuotesDiscoverResultsItem> quotesDiscoverResultsItems = new ArrayList<>();
-    private ArrayList<QuotesDiscoverResultsItem> arrayListFull;
     private Context context;
 
-    public QuoteDiscoverAdapter(Context context, ArrayList<QuotesDiscoverResultsItem> arrayList) {
+    public QuoteDiscoverAdapter(Context context) {
         this.context = context;
-        this.quotesDiscoverResultsItems = arrayList;
-        arrayListFull = new ArrayList<>(arrayList);
     }
 
     public void setData(ArrayList<QuotesDiscoverResultsItem> items){
@@ -84,38 +74,6 @@ public class QuoteDiscoverAdapter extends RecyclerView.Adapter<QuoteDiscoverAdap
     public int getItemCount() {
         return quotesDiscoverResultsItems.size();
     }
-
-    @Override
-    public Filter getFilter() {
-        return FilterQuote;
-    }
-
-    private Filter FilterQuote = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence charSequence) {
-            String searchText=charSequence.toString().toLowerCase();
-            ArrayList<QuotesDiscoverResultsItem> templist = new ArrayList<>();
-            if (searchText.length() == 0 || searchText.isEmpty()){
-                templist.addAll(arrayListFull);
-            } else {
-                for (QuotesDiscoverResultsItem item:arrayListFull){
-                    if (item.getContent().toLowerCase().contains(searchText) || item.getAuthor().toLowerCase().contains(searchText)){
-                        templist.add(item);
-                    }
-                }
-            }
-            FilterResults filterResults = new FilterResults();
-            filterResults.values = templist;
-            return filterResults;
-        }
-
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            arrayListFull.clear();
-            arrayListFull.addAll((Collection<? extends QuotesDiscoverResultsItem>) filterResults.values);
-            notifyDataSetChanged();
-        }
-    };
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvQuote, tvAuthor;
