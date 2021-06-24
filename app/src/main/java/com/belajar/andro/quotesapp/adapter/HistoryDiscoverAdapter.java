@@ -11,11 +11,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.belajar.andro.quotesapp.R;
 import com.belajar.andro.quotesapp.database.AppDatabase;
 import com.belajar.andro.quotesapp.database.SearchHistoryModel;
+import com.belajar.andro.quotesapp.view.fragment.HistoryFragment;
 
 import java.util.ArrayList;
 
@@ -24,6 +27,7 @@ public class HistoryDiscoverAdapter extends RecyclerView.Adapter<HistoryDiscover
     private Context context;
     private AppDatabase appDatabase;
     private ArrayList<SearchHistoryModel> historyModelItems = new ArrayList<>();
+
 
     public HistoryDiscoverAdapter(Context context){
         this.appDatabase = AppDatabase.iniDatabase(this.context);
@@ -43,6 +47,7 @@ public class HistoryDiscoverAdapter extends RecyclerView.Adapter<HistoryDiscover
         return new ViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull HistoryDiscoverAdapter.ViewHolder holder, int position) {
         holder.tvContent.setText(historyModelItems.get(position).getContent());
@@ -59,6 +64,9 @@ public class HistoryDiscoverAdapter extends RecyclerView.Adapter<HistoryDiscover
                     appDatabase.historyDao().deleteHistory(historyModel);
                     Log.e("MainActivity", "Riwayat Berhasil Dihapus, msg: ");
                     Toast.makeText(context, "Riwayat Berhasil Dihapus",Toast.LENGTH_SHORT).show();
+
+
+
                 } catch (Exception ex){
                     Log.e("MainActivity", "Riwayat Gagal Dihapus, msg: "+ex.getMessage());
                     Toast.makeText(context, "Riwayat Gagal Dihapus",Toast.LENGTH_SHORT).show();
@@ -75,7 +83,6 @@ public class HistoryDiscoverAdapter extends RecyclerView.Adapter<HistoryDiscover
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivDelete;
         TextView tvContent,tvAuthor;
-        CardView cardView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivDelete = itemView.findViewById(R.id.iv_delete_history);
@@ -83,4 +90,5 @@ public class HistoryDiscoverAdapter extends RecyclerView.Adapter<HistoryDiscover
             tvAuthor = itemView.findViewById(R.id.item_list_iv_author_history);
         }
     }
+
 }

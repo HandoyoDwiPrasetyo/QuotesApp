@@ -3,6 +3,8 @@ package com.belajar.andro.quotesapp.view.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private Fragment selectedFragment = new QuotesFragment();
     private BottomNavigationView bottomNavigationView;
+    FragmentManager fragmentManager;
 
 
     @Override
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         loadFragment(selectedFragment);
+        fragmentManager = getSupportFragmentManager();
     }
 
 
