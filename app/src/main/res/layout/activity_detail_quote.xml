@@ -105,5 +105,14 @@
             android:text="21-12-21 "/>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/share_quote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+        android:text="SHARE"
+        android:backgroundTint="@color/basic"
+        />
+
 
 </LinearLayout>

@@ -2,8 +2,8 @@
 <androidx.cardview.widget.CardView
     android:id="@+id/item_list_history_CV"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="180dp"
-    android:layout_height="270dp"
+    android:layout_width="160dp"
+    android:layout_height="250dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="20dp"
     app:cardElevation="10dp"
